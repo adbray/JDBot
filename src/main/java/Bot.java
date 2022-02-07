@@ -33,9 +33,13 @@ public class Bot extends ListenerAdapter {
     private final Random rand = new Random();
 
     public static void main(String[] args) throws LoginException {
+        if(args.length < 1){
+            System.out.println("Missing required argument");
+            System.exit(1);
+        }
         final String token = args[0];
         //Bot will crash when a chat message occurs if token is invalid
-        JDABuilder.createLight(token, GatewayIntent.GUILD_MESSAGES, GatewayIntent.DIRECT_MESSAGES)
+        JDABuilder.createLight(token, GatewayIntent.GUILD_MESSAGES)
                 .addEventListeners(new Bot())
                 .setActivity(Activity.playing("Type !ping"))
                 .build();
@@ -52,17 +56,21 @@ public class Bot extends ListenerAdapter {
 
 
         switch (input[0]) {
+            //From JDA example code
             case "_ping" -> {
                 long time = System.currentTimeMillis();
                 channel.sendMessage("Pong!") /* => RestAction<Message> */
                         .queue(response /* => Message */ -> response.editMessageFormat("Pong: %d ms", System.currentTimeMillis() - time).queue());
             }
+            //Unimplemented feature
             case "_leaderboard" -> {
+                //Filler for leaderboard feature
                 EmbedBuilder leaderboard = new EmbedBuilder();
                 leaderboard.setTitle("User: " + msg.getAuthor().getAsTag());
                 leaderboard.addField("Beef", "Broccoli", false);
                 channel.sendMessageEmbeds(leaderboard.build()).queue();
             }
+            //Retrieve user data from REST api
             case "_rest" -> {
                 HttpRequest request = HttpRequest.newBuilder()
                         .uri(URI.create("http://localhost:8080/user?id=" + msg.getAuthor().getIdLong()))
