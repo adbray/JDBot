@@ -7,7 +7,7 @@
 * _conch
 
 ### Instructions:
-Compile to Jar and run with Discord Bot Token as argument
-
+Run with Discord Bot Token as argument  
+Or compile to jar and run with:
 "java -jar JDBot.jar <Bot_Token>"
 
